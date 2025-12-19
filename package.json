@@ -1,0 +1,188 @@
+{
+  "name": "sync-code-dotfiles",
+  "displayName": "Dev Settings Dotfiles Sync",
+  "description": "Sync Dev Settings from your GitHub dotfiles repository",
+  "version": "0.1.1",
+  "publisher": "kayaman",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "cursor",
+    "dotfiles",
+    "sync",
+    "configuration",
+    "mcp",
+    "rules"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kayaman/sync-code-dotfiles"
+  },
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "cursorSync.pull",
+        "title": "Cursor Sync: Pull from GitHub"
+      },
+      {
+        "command": "cursorSync.push",
+        "title": "Cursor Sync: Push to GitHub"
+      },
+      {
+        "command": "cursorSync.configure",
+        "title": "Cursor Sync: Open Settings"
+      },
+      {
+        "command": "cursorSync.showStatus",
+        "title": "Cursor Sync: Show Sync Status"
+      },
+      {
+        "command": "cursorSync.syncToWorkspace",
+        "title": "Cursor Sync: Sync to Current Workspace"
+      },
+      {
+        "command": "cursorSync.syncToGlobal",
+        "title": "Cursor Sync: Sync to Global Config"
+      }
+    ],
+    "configuration": {
+      "title": "Cursor Dotfiles Sync",
+      "properties": {
+        "cursorSync.repoUrl": {
+          "type": "string",
+          "default": "",
+          "description": "GitHub repository URL (e.g., https://github.com/username/dotfiles)",
+          "order": 1
+        },
+        "cursorSync.branch": {
+          "type": "string",
+          "default": "main",
+          "description": "Branch to sync from/to",
+          "order": 2
+        },
+        "cursorSync.repoPath": {
+          "type": "string",
+          "default": "cursor",
+          "description": "Path within repository where configs are stored",
+          "order": 3
+        },
+        "cursorSync.defaultSyncTarget": {
+          "type": "string",
+          "enum": [
+            "global",
+            "workspace",
+            "ask"
+          ],
+          "default": "ask",
+          "enumDescriptions": [
+            "Always sync to global ~/.cursor/",
+            "Always sync to current workspace .cursor/",
+            "Ask each time"
+          ],
+          "description": "Default target for sync operations",
+          "order": 4
+        },
+        "cursorSync.autoSyncEnabled": {
+          "type": "boolean",
+          "default": false,
+          "description": "Enable automatic sync on interval",
+          "order": 5
+        },
+        "cursorSync.autoSyncIntervalMinutes": {
+          "type": "number",
+          "default": 60,
+          "minimum": 5,
+          "maximum": 1440,
+          "description": "Auto-sync interval in minutes (5-1440)",
+          "order": 6
+        },
+        "cursorSync.syncOnStartup": {
+          "type": "boolean",
+          "default": false,
+          "description": "Sync when VS Code/Cursor starts",
+          "order": 7
+        },
+        "cursorSync.syncOnNewWorkspace": {
+          "type": "boolean",
+          "default": true,
+          "description": "Prompt to sync when a new workspace folder is added",
+          "order": 8
+        },
+        "cursorSync.githubToken": {
+          "type": "string",
+          "default": "",
+          "description": "GitHub Personal Access Token (required for push). Store securely or use environment variable CURSOR_SYNC_GITHUB_TOKEN",
+          "order": 9
+        },
+        "cursorSync.conflictResolution": {
+          "type": "string",
+          "enum": [
+            "ask",
+            "keepLocal",
+            "useRemote"
+          ],
+          "default": "ask",
+          "enumDescriptions": [
+            "Ask for each conflict",
+            "Always keep local version",
+            "Always use remote version"
+          ],
+          "description": "How to handle conflicts between local and remote files",
+          "order": 10
+        },
+        "cursorSync.filesToSync": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".cursorrules",
+            "rules/**",
+            "mcp.json",
+            "prompts/**"
+          ],
+          "description": "Files and patterns to sync (relative to repoPath)",
+          "order": 11
+        }
+      }
+    },
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "cursorSync.pull",
+          "when": "true"
+        },
+        {
+          "command": "cursorSync.push",
+          "when": "config.cursorSync.githubToken"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
+    "watch": "esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --watch",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package",
+    "publish": "vsce publish"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "esbuild": "^0.19.8",
+    "eslint": "^8.54.0",
+    "typescript": "^5.3.2",
+    "@vscode/vsce": "^2.22.0"
+  }
+}

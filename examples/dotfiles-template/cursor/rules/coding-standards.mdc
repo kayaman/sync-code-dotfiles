@@ -1,0 +1,35 @@
+---
+description: Coding standards and best practices
+globs: ["**/*.py", "**/*.ts", "**/*.js", "**/*.rs"]
+---
+
+# Coding Standards
+
+## General Principles
+
+1. **Readability First**: Code is read far more often than it is written. Optimize for readability.
+
+2. **Single Responsibility**: Each function/class should do one thing well.
+
+3. **DRY (Don't Repeat Yourself)**: Extract common patterns into reusable functions.
+
+4. **YAGNI (You Aren't Gonna Need It)**: Don't add functionality until it's needed.
+
+## Error Handling
+
+- Handle errors explicitly, don't ignore them
+- Provide meaningful error messages
+- Fail fast and loudly in development
+- Fail gracefully in production
+
+## Documentation
+
+- Document the "why", not the "what"
+- Keep documentation close to the code
+- Update docs when code changes
+
+## Testing
+
+- Write tests for critical paths first
+- Test edge cases and error conditions
+- Keep tests focused and independent
